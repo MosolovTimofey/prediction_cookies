@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
-from data.jobs import Jobs
+from data.leaders import Jobs
 from data.forms import RegisterForm, LoginForm, WorksForm
 from flask_login import LoginManager, login_user, logout_user, login_required
 import os
@@ -21,7 +21,7 @@ def load_user(id):
 def index():
     session = db_session.create_session()
     jobs = session.query(Jobs).all()
-    return render_template("journal_works.html", jobs=jobs)
+    return render_template("base.html", jobs=jobs)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,7 +40,7 @@ def login():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.confirm.data:
@@ -48,14 +48,13 @@ def reqister():
                                    form=form,
                                    message="Пароли не совпадают")
         db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.login.data).first():
+        if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
             name=form.name.data,
-            surname=form.surname.data,
-            email=form.login.data
+            email=form.email.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -89,7 +88,7 @@ def logout():
 
 
 def main():
-    name_db = 'mars_explorer.db'
+    name_db = 'predictions_and_players.db'
     db_session.global_init(f"db/{name_db}")
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
