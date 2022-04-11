@@ -17,6 +17,7 @@ def load_user(id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(id)
 
+
 @app.route("/")
 def index():
     session = db_session.create_session()
@@ -80,6 +81,16 @@ def add_work():
     return render_template('add_work.html', title='Добавление работ', form=form)
 
 
+@app.route('/cookie')
+def cookie():
+    return render_template('cookie.html', title='Печенье')
+
+
+@app.route('/cookie_opened')
+def cookie_opened():
+    return render_template('cookie_opened.html', title='Что же тут?')
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -92,6 +103,7 @@ def main():
     db_session.global_init(f"db/{name_db}")
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 if __name__ == '__main__':
     main()
