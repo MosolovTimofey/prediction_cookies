@@ -18,7 +18,7 @@ class User(SqlAlchemyBase, UserMixin):
                               index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    leaders = orm.relation("Jobs", back_populates='user')
+    leaders = orm.relation("Leaders", back_populates='user')
 
     def __repr__(self):
         return f'<User> {self.place} {self.score} {self.name}'

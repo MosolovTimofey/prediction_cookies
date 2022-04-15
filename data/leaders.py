@@ -4,7 +4,7 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-class Jobs(SqlAlchemyBase):
+class Leaders(SqlAlchemyBase):
     __tablename__ = 'leaders'
 
     place = sqlalchemy.Column(sqlalchemy.Integer,

@@ -1,6 +1,7 @@
 <style>
 
 </style>
+<script>var Score = score</script>
 <p style="text-align: center;"></p>
 <h1 style="text-align: center;">Печенье с предсказанием!</h1>
 <p style="text-align: center;"><img src="static/cookie.png"></p>
@@ -8,4 +9,6 @@
        value="Открыть печенье"
        style="font-size : 20px; width: 200px; height: 100px; text-align: center;"
        class="open_button"
-       onClick='location.href="cookie_opened"' /> </p>
+       onmouseup="{{Score}}={{Score}}+1"
+       onClick='location.href="cookie_opened"'
+/> </p>

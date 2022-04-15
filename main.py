@@ -1,7 +1,8 @@
+import sqlite3
 from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
-from data.leaders import Jobs
+from data.leaders import Leaders
 from data.forms import RegisterForm, LoginForm, WorksForm
 from flask_login import LoginManager, login_user, logout_user, login_required
 import os
@@ -21,8 +22,26 @@ def load_user(id):
 @app.route("/")
 def index():
     session = db_session.create_session()
-    jobs = session.query(Jobs).all()
+    jobs = session.query(Leaders).all()
     return render_template("base.html", jobs=jobs)
+
+
+@app.route('/cookie')
+def cookie():
+    return render_template('cookie.html', title='Печенье')
+
+
+@app.route('/cookie_opened')
+def cookie_opened():
+    print(User.score)
+    con = sqlite3.connect(database='db/predictions_and_players.db')
+    cur = con.cursor()
+    result = cur.execute(f"""UPDATE users
+        SET score = score + 1
+        WHERE name = 'yo'""")
+    con.commit()
+    con.close()
+    return render_template('cookie_opened.html', title='Что же тут?')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -55,7 +74,8 @@ def register():
                                    message="Такой пользователь уже есть")
         user = User(
             name=form.name.data,
-            email=form.email.data
+            email=form.email.data,
+            score=0
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -69,7 +89,7 @@ def add_work():
     form = WorksForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        job = Jobs(
+        job = Leaders(
             team_leader=form.team_leader.data,
             job=form.job.data,
             work_size=form.work_size.data,
@@ -79,16 +99,6 @@ def add_work():
         db_sess.commit()
         return redirect('/')
     return render_template('add_work.html', title='Добавление работ', form=form)
-
-
-@app.route('/cookie')
-def cookie():
-    return render_template('cookie.html', title='Печенье')
-
-
-@app.route('/cookie_opened')
-def cookie_opened():
-    return render_template('cookie_opened.html', title='Что же тут?')
 
 
 @app.route('/logout')
