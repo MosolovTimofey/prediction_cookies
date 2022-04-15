@@ -20,9 +20,7 @@ def load_user(id):
 
 @app.route("/")
 def index():
-    session = db_session.create_session()
-    jobs = session.query(Jobs).all()
-    return render_template("journal_works.html", jobs=jobs)
+    return render_template("base.html")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -65,23 +63,6 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/add_work', methods=['GET', 'POST'])
-def add_work():
-    form = WorksForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        job = Jobs(
-            team_leader=form.team_leader.data,
-            job=form.job.data,
-            work_size=form.work_size.data,
-            collaborators=form.collaborators.data
-        )
-        db_sess.add(job)
-        db_sess.commit()
-        return redirect('/')
-    return render_template('add_work.html', title='Добавление работ', form=form)
-
-
 @app.route('/cookie')
 def cookie():
     return render_template('cookie.html', title='Печенье')
@@ -90,6 +71,15 @@ def cookie():
 @app.route('/cookie_opened')
 def cookie_opened():
     return render_template('cookie_opened.html', title='Что же тут?')
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 
 @app.route('/logout')

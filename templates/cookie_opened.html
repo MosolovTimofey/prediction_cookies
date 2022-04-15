@@ -1,3 +1,43 @@
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+<div class="topnav">
+  <a class="active" href="/">Домой</a>
+  <a href="cookie">Печенье</a>
+  <a href="about">О нас</a>
+</div>
 <p style="text-align: center;"></p>
 <h1 style="text-align: center;">Печенье с предсказанием!</h1>
 <p style="text-align: center;"><img src="static/cookie_opened.png" ></p>
+<p style="text-align: center;"><input type="submit"
+       value="Понятно. Хочу ещё!"
+       style="font-size : 20px; width: 200px; height: 50px; text-align: center;"
+       class="open_button"
+       onClick='location.href="cookie"' /> </p>
