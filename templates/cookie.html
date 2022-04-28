@@ -1,9 +1,8 @@
-<style>
+<script type="text/javascript" src="/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=0DS1WW2aDJG0yTtesE7feSppP3v8Xd-bmRxWaL-FYM0hswyjVsm6o_tRL-oWxOTu_h8zREEcUsQBR6Q-5Dls5aB2c7vf4d7m89LqTWgrO7N8ey9R5k0J_BkYx_DfFIPU5SNj5iotrD7xU-QtXj4aES4qj_R0DXRMgMbIZiUVs-MPsJIX-NDbUciQ7B4kAo4hPB5ZiWD3Zhj0CWggmgDjd_6YV-IDlwk5SNQ_UTsJ9978r4uaz4s37clRB51DO1e3f-PLHLXFXLKS49BFa6qKtLbjm6s_xQujpQnJLAMg_GI" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9maWxlcy5tZXNzZW5nZXIueWFuZGV4Lm5ldC9maWxlL2QyYjE5ZTk0LTcxZGItNDBjYS05N2U2LTMxMzcxZDdmZTgwYT9zaWduPVNUXzE2NTEwODM5OTdfOTk1M2NmMDMwY2ZmOTQ2YzcxZDFmOTcwY2ZmNTIyNzVfNzhkOWM1OTM3OTM0NTE1OWUwOTJjZDEzNDQ1NDE3MTlkODRmMTg0ZTIxZjI3YmZiNTA1N2I2MmImYXR0YWNoPXRydWU"/><style>
 
 </style>
 <script>var Score = score</script>
-<p style="text-align: center;"></p>
-<h1 style="text-align: center;">Печенье с предсказанием!</h1>
+
 <p style="text-align: center;"><img src="static/cookie.png"></p>
 <p style="text-align: center;"><input type="submit"
        value="Открыть печенье"
@@ -12,3 +11,46 @@
        onmouseup="{{Score}}={{Score}}+1"
        onClick='location.href="cookie_opened"'
 /> </p>
+{% if current_user.is_authenticated %}
+            <a href="/cookie_opened">
+               дневник
+            </a>
+
+            <a href="/logout">
+              выход
+            </a>
+        {% else %}
+            <a href="/login">
+               авторизация
+            </a>
+        {% endif %}
+
+
+{% extends "base.html" %}
+
+{% block content %}
+     <p style="text-align: center;"></p>
+<h1 style="text-align: center;">Печенье с предсказанием!</h1>
+      {% if message %}
+            <div class="alert alert-warning" role="alert">
+              {{ message }}
+            </div>
+      {% endif %}
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.team.label }}<br>
+            {{ form.team}}<br>
+            {% for error in form.team.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+
+
+        <p>{{ form.submit() }}</p>
+    </form>
+
+{% endblock %}

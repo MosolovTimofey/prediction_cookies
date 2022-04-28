@@ -27,3 +27,8 @@ class WorksForm(FlaskForm):
     collaborators = StringField('Collaborators', validators=[DataRequired()])
     is_finished = BooleanField('Is_finished', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class WForm(FlaskForm):
+    """форма добавления работ"""
+    team = IntegerField('id cap', validators=[DataRequired()])
+    submit = SubmitField('Submit')

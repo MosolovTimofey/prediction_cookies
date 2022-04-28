@@ -3,8 +3,8 @@ from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
 from data.leaders import Leaders
-from data.forms import RegisterForm, LoginForm, WorksForm
-from flask_login import LoginManager, login_user, logout_user, login_required
+from data.forms import RegisterForm, LoginForm, WForm
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import os
 
 app = Flask(__name__)
@@ -26,22 +26,32 @@ def index():
     return render_template("base.html", jobs=jobs)
 
 
-@app.route('/cookie')
+@app.route('/cookie', methods=['GET', 'POST'])
 def cookie():
-    return render_template('cookie.html', title='Печенье')
+    form = WForm()
+    print(form.submit.data)
+    if form.submit.data:
+        if current_user.is_authenticated:
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            user.score += 1
+            db_sess.commit()
+
+        return cookie_opened()
+    return render_template('cookie.html', title='Печенье', form=form)
 
 
 @app.route('/cookie_opened')
 def cookie_opened():
-    print(User.score)
+    print(current_user.score)
+    name = 'a'
     con = sqlite3.connect(database='db/predictions_and_players.db')
     cur = con.cursor()
-    result = cur.execute(f"""UPDATE users
-        SET score = score + 1
-        WHERE name = 'yo'""")
+    result = cur.execute("""SELECT score FROM users
+                WHERE name = ?""", (name)).fetchone()
     con.commit()
     con.close()
-    return render_template('cookie_opened.html', title='Что же тут?')
+    return render_template('cookie_opened.html', title='Что же тут?', score=result)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -86,7 +96,7 @@ def register():
 
 @app.route('/add_work', methods=['GET', 'POST'])
 def add_work():
-    form = WorksForm()
+    form = WForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         job = Leaders(
